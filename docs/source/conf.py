@@ -1,82 +1,87 @@
 # Configuration file for the Sphinx documentation builder.
+#
+# This file only contains a selection of the most common options. For a full
+# list see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
+
+# -- Path setup --------------------------------------------------------------
+
+# If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+#
 import os
-import sys
-# Need this so sphinx can find lumache.py. Change is .py files are elsewhere than root.
-sys.path.insert(0, os.path.abspath('../..'))
-sys.path.insert(0, os.path.abspath('../../src'))
+# import sys
+# sys.path.insert(0, os.path.abspath('.'))
 
-# -- Project information
 
-project = 'Coastal'
-copyright = '2021'
-author = 'Multiple'
+# -- Project information -----------------------------------------------------
 
-release = '0.1'
-version = '0.1.0'
+project = 'UVVM'
+author = 'UVVM'
+copyright = '2021, UVVM'
 
-# -- General configuration
+# The full version, including alpha/beta/rc tags
+def read_uvvm_version(fname):
+    with open(os.path.join(os.path.dirname(__file__), fname)) as rf:
+        lines = rf.readlines()
 
+    for idx, line in enumerate(lines):
+        if line.startswith('v'):
+            if '----' in lines[idx+1]:
+                return line.strip()
+
+def read_module_version(fname):
+    versions = ''
+    with open(os.path.join(os.path.dirname(__file__), fname)) as rf:
+        lines = rf.readlines()
+
+    for idx, line in enumerate(lines):
+        if idx > 0:
+            versions += line.strip() + '\n'
+    return versions
+
+            
+uvvm_version = read_uvvm_version('../../CHANGES.TXT')
+module_versions = read_module_version('../../versions.txt')
+
+
+# -- General configuration ---------------------------------------------------
+
+# Add any Sphinx extension module names here, as strings. They can be
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
+# ones.
 extensions = [
-    'sphinx.ext.duration',
-    'sphinx.ext.doctest',
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.intersphinx',
-    # 'autoapi.extension',
-#    'sphinxcontrib.apidoc',
 ]
 
-# autoapi_type = 'python'
-# autoapi_dirs = ['../../src']
-
-#apidoc_module_dir = '../../src'
-#apidoc_output_dir = '.'
-#apidoc_excluded_paths = ['tests']
-#apidoc_separate_modules = True
-
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None),
-    'sphinx': ('https://www.sphinx-doc.org/en/master/', None),
-}
-intersphinx_disabled_domains = ['std']
-
+# Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-# -- Options for HTML output
+# List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+# This pattern also affects html_static_path and html_extra_path.
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-html_theme = 'sphinx_rtd_theme'
+highlight_language = 'VHDL'
 
-# -- Options for EPUB output
-epub_show_urls = 'footnote'
-
-html_context = {
-    "display_github": True, # Integrate GitHub
-    "github_repo": "carlpjansen/readthedoc-test", # Repo name
-    "github_version": "main", # Version
-    "conf_py_path": "docs/source/", # Path in the checkout to the docs root
-}
 
 # -- Options for HTML output -------------------------------------------------
 
-html_short_title = "topobathy"
-html_show_sourcelink = False
-html_show_sphinx = True
-html_show_copyright = True
+# The theme to use for HTML and HTML Help pages.  See the documentation for
+# a list of builtin themes.
+#
+html_theme = 'sphinx_rtd_theme'
+
+html_theme_options = {
+    'navigation_depth': '5',
+    'style_nav_header_background': '#F5F5F5',
+    'logo_only': 'True'
+}
+
+html_logo = 'images/uvvm.png'
+
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
-repository_url = f"https://github.com/ICESAT-2HackWeek/coastal_topobathy"
-html_context = {
-    "menu_links": [
-        (
-            '<i class="fa fa-github fa-fw"></i> Source Code',
-            repository_url,
-        ),
-        (
-            '<i class="fa fa-book fa-fw"></i> License',
-            f"{repository_url}/blob/main/LICENSE",
-        ),
-    ],
-}
+# html_static_path = ['_static']
